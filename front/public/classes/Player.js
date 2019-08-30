@@ -1,8 +1,6 @@
-function Player(nick_name, class_name){
-    this.nick_name = nick_name;
-    this.class_name = class_name;
+class Player {
+    constructor(){};
 }
-
 
 //ACTION FUNCTIONS
 Player.prototype.attackPlayer = function(player){
