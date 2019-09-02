@@ -1,8 +1,9 @@
 import Player from "./Player";
 
 class Mage extends Player {
-    constructor(){
+    constructor(name){
         super();
+        this.name = name;
         this.health = 700;
         this.maxHealth = this.health;
         this.mana = 600;

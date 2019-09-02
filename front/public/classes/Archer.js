@@ -1,8 +1,9 @@
 import Player from "./Player";
 
 class Archer extends Player {
-    constructor(){
+    constructor(name){
         super();
+        this.name = name;
         this.health = 900;
         this.maxHealth = this.health;
         this.mana = 0;

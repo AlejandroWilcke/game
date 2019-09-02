@@ -4,8 +4,8 @@ import Mage from './classes/Mage.js';
 import GameArea from './classes/GameArea.js';
 import Error from './librerias/Error.js';
 
-var mage = new Mage();
-var archer = new Archer();
+var mage = new Mage('Guada');
+var archer = new Archer('Ale');
 
 var gameArea = new GameArea(100, 50);
 
@@ -23,10 +23,6 @@ methods.forEach(function(method){
     document.body.appendChild(button);
 });
 
-try{
-    if(9 > 4){
-        throw new Error('Message');
-    }
-}catch(e){
-    console.log(e.message);
-}
+window.addEventListener('keydown', function(e){
+    String.fromCharCode(e.keyCode) === 'Z' ? archer.attack(mage) : console.log('Miss!');
+})

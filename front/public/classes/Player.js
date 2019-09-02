@@ -3,14 +3,14 @@ class Player {
 }
 
 //ACTION FUNCTIONS
-Player.prototype.attackPlayer = function(player){
+Player.prototype.attack = function(player){
     if ( player.health > 0 ) {
         this.isCriticalHit() ? (player.health -= this.damage * this.criticalDamage) : (player.health -= this.damage);
         player.health < 0 ? player.health = 0 : null;
     }
 }
 
-Player.prototype.healPlayer = function(player){
+Player.prototype.heal = function(player){
     if ( this.mana > this.healingCost && player.health < player.maxHealth ){
         player.health += this.healingPower;
         player.health > player.maxHealth ? player.health = player.maxHealth : null;
