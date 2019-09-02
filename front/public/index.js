@@ -2,6 +2,7 @@ import Archer from './classes/Archer.js';
 import Player from './classes/Player.js';
 import Mage from './classes/Mage.js';
 import GameArea from './classes/GameArea.js';
+import Error from './librerias/Error.js';
 
 var mage = new Mage();
 var archer = new Archer();
@@ -21,3 +22,11 @@ methods.forEach(function(method){
     button.onclick = function(){ gameArea[key]() }
     document.body.appendChild(button);
 });
+
+try{
+    if(9 > 4){
+        throw new Error('Message');
+    }
+}catch(e){
+    console.log(e.message);
+}
