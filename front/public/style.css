@@ -6,3 +6,22 @@ body{
 canvas{
     border: 1px solid white;
 }
+
+.menu {
+    border: 1px solid white;
+    background-image: url('imgs/background.png');
+    background-size: contain;
+    width: 40vw;
+    height: 60vh;
+}
+
+.menuContent{
+    position: absolute;
+    left: 10vw;
+}
+
+.btn-lg{
+    color: white;
+    outline: 0;
+    box-shadow: none!important;
+}

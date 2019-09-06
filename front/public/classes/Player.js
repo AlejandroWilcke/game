@@ -1,5 +1,10 @@
 class Player {
-    constructor(){};
+    constructor(){
+        this.x = 50;
+        this.y = 50;
+        this.width = 70;
+        this.height = 70;
+    };
 }
 
 //ACTION FUNCTIONS
@@ -7,16 +12,16 @@ Player.prototype.attack = function(player){
     if ( player.health > 0 ) {
         this.isCriticalHit() ? (player.health -= this.damage * this.criticalDamage) : (player.health -= this.damage);
         player.health < 0 ? player.health = 0 : null;
+        console.log(this.name + " attacked " + player.name + " and now has " + player.health + " health" )
     }
 }
 
-Player.prototype.heal = function(player){
-    if ( this.mana > this.healingCost && player.health < player.maxHealth ){
-        player.health += this.healingPower;
-        player.health > player.maxHealth ? player.health = player.maxHealth : null;
-        this.mana -= this.healingCost;
-        this.mana < 0 ? this.mana = 0 : null;
-    }
+Player.prototype.walk = function(direction){
+    direction === 'LEFT' ? this.x -= this.movementSpeed : this.x += this.movementSpeed;
+}
+
+Player.prototype.jump = function(){
+    
 }
 
 //CALCULATION FUNCTIONS
