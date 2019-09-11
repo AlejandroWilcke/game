@@ -5,7 +5,7 @@ var area = {
         this.addCanvas();
         this.addEventListeners();
         this.generateCircles();
-        this.interval = setInterval(area.updateGameArea, 1000/40);
+        this.interval = setInterval(area.updateGameArea, 1000/60);
     },
     addCanvas(){
         this.canvas.width = window.innerWidth - 50;
@@ -15,8 +15,14 @@ var area = {
     },
     addEventListeners(){
         window.addEventListener('resize', this.resizeCanvas);
+        window.addEventListener('visibilitychange', this.pauseOrResume);
+    },
+    pauseOrResume(e){
+        document.hidden ? clearInterval(area.interval) : area.interval = setInterval(area.updateGameArea, 1000/60);
     },
     generateCircles(){
+        // new Circle(0, 200, 200, 20, 'right', 'none', 2, 2, 'black');
+        // new Circle(1, 800, 200, 20, 'left', 'none', 2, 2, 'black');
         let quantity = 30;
         for( let i = 0; i < quantity; i++ ){
             let x = Math.round( Math.random() * area.canvas.width );
@@ -26,8 +32,9 @@ var area = {
             let directionsY = ['up', 'up', 'up', 'up', 'down', 'down', 'down', 'down'];
             let dx = directionsX[Math.floor( Math.random() * directionsX.length )];
             let dy = directionsY[Math.floor( Math.random() * directionsY.length )];
-            let speed = Math.ceil( Math.random() * 3 );
-            new Circle(x, y, r, dx, dy, speed, 'red');
+            let speedX = Math.ceil( Math.random() * 3 );
+            let speedY = Math.ceil( Math.random() * 3 );
+            new Circle(i, x, y, r, dx, dy, speedX, speedY, 'red');
         }
     },
     resizeCanvas(e){
@@ -36,55 +43,81 @@ var area = {
     },
     updateGameArea(){
         area.ctx.clearRect(0, 0, area.canvas.width, area.canvas.height);
-        area.circles.forEach( c => c.update() );
+        area.circles.forEach( circle => circle.update() );
     }
 }
 
 class Circle {
-    constructor(x, y, r, dx, dy, speed, color){
+    constructor(i, x, y, r, dx, dy, speedX, speedY, color){
+        this.i = i;
         this.x = x;
         this.y = y;
         this.r = r;
         this.dx = dx;
         this.dy = dy;
         this.color = color;
-        this.speed = speed;
+        this.speedX = speedX;
+        this.speedY = speedY;
         area.circles.push(this);
     }
 }
 
 Circle.prototype.update = function(){
 
-    if( this.x <= 0 && this.dx === 'left' ) {
+    if( this.x - this.r <= 0 && this.dx === 'left' ) {
         this.dx = 'right';
     }
 
-    if( this.x >= area.canvas.width && this.dx === 'right' ){
+    if( this.x + this.r >= area.canvas.width && this.dx === 'right' ){
         this.dx = 'left';
     }
 
-    if( this.y <= 0 && this.dy === 'up' ) {
+    if( this.y - this.r <= 0 && this.dy === 'up' ) {
         this.dy = 'down';
     }
 
-    if( this.y >= area.canvas.height && this.dy === 'down' ){
+    if( this.y + this.r >= area.canvas.height && this.dy === 'down' ){
         this.dy = 'up';
     }
 
+    this.collisioned();
+
     switch(this.dx){
-        case 'left': this.x -= this.speed; break;
-        case 'right': this.x += this.speed; break;
+        case 'left': this.x -= this.speedX; break;
+        case 'right': this.x += this.speedX; break;
     }
 
     switch(this.dy){
-        case 'up': this.y -= this.speed; break;
-        case 'down': this.y += this.speed; break;
+        case 'up': this.y -= this.speedY; break;
+        case 'down': this.y += this.speedY; break;
     }
 
     area.ctx.beginPath();
     area.ctx.strokeStyle = this.color;
     area.ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
     area.ctx.stroke();
+}
+
+Circle.prototype.collisioned = function(){
+    for( let i = 0; i < area.circles.length; i++ ){
+
+        if ( this.i === i ) { continue }
+
+        let circle = area.circles[i];
+
+        if (
+            this.x + this.r >= circle.x - circle.r &&
+            this.x - this.r <= circle.x + circle.r &&
+            this.y - this.r <= circle.y + circle.r &&
+            this.y + this.r >= circle.y - circle.r
+            ){
+            this.dx === 'right' ? this.dx = 'left' : this.dx = 'right';
+            this.dy === 'up'    ? this.dy = 'down' : this.dy = 'up';
+            // circle.dx === 'right' ? circle.dx = 'left' : circle.dx = 'right';
+            // circle.dy === 'up'    ? circle.dy = 'down' : circle.dy = 'up';
+        }
+
+    }
 }
 
 area.start();
